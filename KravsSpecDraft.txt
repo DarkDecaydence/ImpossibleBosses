@@ -1,0 +1,8 @@
+Kravspecifikation: (Draft)
+
+1 spiller
+- 2 angrebs muligheder
+- 1 forsvarsmulighed
+- 8 directional movement
+1 Level
+1 boss
