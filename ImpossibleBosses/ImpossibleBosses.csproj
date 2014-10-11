@@ -35,7 +35,12 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CollisionDetection\CollisionDetector.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="GameObjects\GameObject.cs" />
+    <Compile Include="GameObjects\GOID.cs" />
+    <Compile Include="LevelGenerator\LevelSerializer.cs" />
+    <Compile Include="MapHandler\GameMap.cs" />
     <Compile Include="PlayerController\PlayerController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,6 +76,9 @@
     <Content Include="Content\PlayerTestTileSet.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewFrames\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

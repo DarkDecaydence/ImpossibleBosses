@@ -41,7 +41,7 @@ namespace ImpossibleBosses.PlayerController
                 finalMoveDir += tempMoveDir;
             }
 
-            Vector2.Clamp(finalMoveDir, new Vector2(-1, -1), new Vector2(1, 1));
+            Vector2.Clamp(finalMoveDir, new Vector2(-2, -2), new Vector2(2, 2));
 
             return finalMoveDir;
 
@@ -51,12 +51,33 @@ namespace ImpossibleBosses.PlayerController
         {
             switch (command)
             {
-                case "moveUp": return new Vector2(0, -1);
-                case "moveLeft": return new Vector2(-1, 0);
-                case "moveDown": return new Vector2(0, 1);
-                case "moveRight": return new Vector2(1, 0);
+                case "moveUp": return new Vector2(0, -2);
+                case "moveLeft": return new Vector2(-2, 0);
+                case "moveDown": return new Vector2(0, 2);
+                case "moveRight": return new Vector2(2, 0);
                 default: return new Vector2(0, 0);
             }
+        }
+
+        public static int GetFacing(Vector2 direction)
+        {
+            int facingMask = Convert.ToInt32("11111111", 2);
+            switch ((int)direction.X)
+            {
+                case 2:  facingMask &= Convert.ToInt32("00001110", 2); break;
+                case 0:  facingMask &= Convert.ToInt32("00010001", 2); break;
+                case -2: facingMask &= Convert.ToInt32("11100000", 2); break;
+            }
+            switch ((int)direction.Y)
+            {
+                case 2:  facingMask &= Convert.ToInt32("00111000", 2); break;
+                case 0:  facingMask &= Convert.ToInt32("01000100", 2); break;
+                case -2: facingMask &= Convert.ToInt32("10000011", 2); break;
+            }
+
+            int newFacing = (int)Math.Log((double)facingMask, 2.0);
+            if (facingMask == 0) { newFacing = -1; }
+            return newFacing;
         }
     }
 }

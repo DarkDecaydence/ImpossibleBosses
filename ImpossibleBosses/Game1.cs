@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
+using ImpossibleBosses.GameObjects;
 #endregion
 
 namespace ImpossibleBosses
@@ -19,6 +20,7 @@ namespace ImpossibleBosses
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         PlayerController.PlayerController player1 = new PlayerController.PlayerController(1);
+        MapHandler.GameMap curMap = new MapHandler.GameMap();
 
         public Game1()
             : base()
@@ -77,12 +79,24 @@ namespace ImpossibleBosses
                 Exit();
 
             // TODO: Add your update logic here
+            Vector2 moveDir = player1.Update();
+            if (curMap.isFree(pc.TryMove(moveDir))) { pc.Move(moveDir); }
+            else
+            {
+                var xMove = new Vector2(moveDir.X, 0);
+                var yMove = new Vector2(0, moveDir.Y);
+                if (curMap.isFree(pc.TryMove(xMove))) { pc.Move(xMove); }
+                if (curMap.isFree(pc.TryMove(yMove))) { pc.Move(yMove); }
+            }
 
-            topLeftCorner += player1.Update();
+            if ((pc.Facing = PlayerController.PlayerController.GetFacing(moveDir)) < 0)
+            { pc.Facing = lastFacing; }
+            else { lastFacing = pc.Facing; }
             base.Update(gameTime);
         }
 
-        Vector2 topLeftCorner = new Vector2();
+        int lastFacing = 0;
+        GameObject pc = new GameObject(80, 80);
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -94,7 +108,8 @@ namespace ImpossibleBosses
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            spriteBatch.Draw(TileHandler.GetTileSet("basic"), topLeftCorner, new Rectangle(0, 0, 40, 40), Color.White);
+            curMap.Draw(spriteBatch);
+            spriteBatch.Draw(TileHandler.GetTileSet("player"), new Vector2(pc.Position.X, pc.Position.Y), new Rectangle(pc.Facing * 40, 0, 40, 40), Color.White);
             spriteBatch.End();
 
             base.Draw(gameTime);
